@@ -7,16 +7,18 @@ app.secret_key = 'keep it secret, keep it safe'
 def counter():
     print('*'*100)
     print('counter working')
-    if 'count' not in session:
+    if 'count' in session:
+        session['count'] += 1
+    else:    
         session['count'] = 0
-    session['count'] += 1
+    
     return render_template('index_counter.html')
 
 @app.route('/reset', methods = ['POST'])
 def reset():
     print('*'*100)
     print('resetting counter to 0')
-    session['count']=0
+    session['count']= -1
     return redirect('/')
 
 @app.route('/add_2', methods = ['POST'])
@@ -24,6 +26,13 @@ def add_2():
     print('*'*100)
     print('adding 2')
     session['count']+=1
+    return redirect('/')
+
+@app.route('/destroy', methods = ['POST'])
+def destroy():
+    print('*'*100)
+    print('sessions destroyed')
+    session.clear()
     return redirect('/')
 
 if __name__ == "__main__":
